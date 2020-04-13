@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.Core", "Thaumatec.Core\Thaumatec.Core.csproj", "{7941D9B7-EDF4-47F0-8280-F485FC237D41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.Web", "Thaumatec.Web\Thaumatec.Web.csproj", "{BF6000A5-2E73-42AE-AF54-D8F351E3FAD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.UnitTest", "Thaumatec.UnitTest\Thaumatec.UnitTest.csproj", "{70F74B25-671B-4252-8BE3-615BCBFF372F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.MongoMigrations", "Thaumatec.Migration\Thaumatec.MongoMigrations.csproj", "{BAD3A88A-A5B9-45FB-858C-5A676537D11F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.ManagementTool", "Thaumatec.ManagementTool\Thaumatec.ManagementTool.csproj", "{2EB9DC40-04D4-4BD5-9A53-9F40C1375E84}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.DatabaseTest", "Thaumatec.DatabaseTest\Thaumatec.DatabaseTest.csproj", "{E57F5D17-3795-4503-933E-249BEA37A94C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7941D9B7-EDF4-47F0-8280-F485FC237D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7941D9B7-EDF4-47F0-8280-F485FC237D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7941D9B7-EDF4-47F0-8280-F485FC237D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7941D9B7-EDF4-47F0-8280-F485FC237D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6000A5-2E73-42AE-AF54-D8F351E3FAD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6000A5-2E73-42AE-AF54-D8F351E3FAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6000A5-2E73-42AE-AF54-D8F351E3FAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6000A5-2E73-42AE-AF54-D8F351E3FAD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F74B25-671B-4252-8BE3-615BCBFF372F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F74B25-671B-4252-8BE3-615BCBFF372F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F74B25-671B-4252-8BE3-615BCBFF372F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F74B25-671B-4252-8BE3-615BCBFF372F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD3A88A-A5B9-45FB-858C-5A676537D11F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD3A88A-A5B9-45FB-858C-5A676537D11F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD3A88A-A5B9-45FB-858C-5A676537D11F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD3A88A-A5B9-45FB-858C-5A676537D11F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB9DC40-04D4-4BD5-9A53-9F40C1375E84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EB9DC40-04D4-4BD5-9A53-9F40C1375E84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EB9DC40-04D4-4BD5-9A53-9F40C1375E84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EB9DC40-04D4-4BD5-9A53-9F40C1375E84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E57F5D17-3795-4503-933E-249BEA37A94C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E57F5D17-3795-4503-933E-249BEA37A94C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E57F5D17-3795-4503-933E-249BEA37A94C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E57F5D17-3795-4503-933E-249BEA37A94C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEBC5A0B-3603-48CD-9900-C9BAA8283D59}
+	EndGlobalSection
+EndGlobal
