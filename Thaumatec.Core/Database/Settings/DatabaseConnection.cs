@@ -2,6 +2,8 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using Mongo.Migration.Startup.Static;
+using Mongo.Migration.Startup;
 
 namespace Thaumatec.Core.Database.Settings
 {
@@ -25,12 +27,7 @@ namespace Thaumatec.Core.Database.Settings
 
         public static void SetConnection(Config config)
         {
-            if (isConnectionEstablished)
-                return;
-
-            _client = new MongoClient(config.ConnectionString);
-            _db = Client.GetDatabase(config.DatabaseName);
-            isConnectionEstablished = true;
+            SetConnection(config.ConnectionString, config.DatabaseName);
         }
 
         public static void SetConnection(string connectionString, string databaseName)
@@ -39,7 +36,8 @@ namespace Thaumatec.Core.Database.Settings
                 return;
 
             _client = new MongoClient(connectionString);
-            _db = Client.GetDatabase(databaseName); 
+            _db = Client.GetDatabase(databaseName);
+            //MongoMigrationClient.Initialize(_client);
             isConnectionEstablished = true;
         }
     }

@@ -13,6 +13,8 @@ using Serilog.Events;
 using Thaumatec.Core.Logging;
 using Thaumatec.Core.Mqtt;
 using Thaumatec.MqttServer;
+using Mongo.Migration.Startup;
+using Mongo.Migration.Startup.DotNetCore;
 
 namespace Thaumatec.Web
 {
@@ -50,13 +52,6 @@ namespace Thaumatec.Web
                 configuration.RootPath = "Frontend/dist";
             });
             
-            /*services.AddMigration(new MongoMigrationSettings
-            {
-                ConnectionString = config.ConnectionString,
-                Database = config.DatabaseName,
-                VersionFieldName = "Version" // Optional
-            });*/
-
             services.AddSingleton(_runtimeStatus);
             services.AddSingleton<IClock>(SystemClock.Instance);
         }

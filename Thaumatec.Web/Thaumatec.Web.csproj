@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Thaumatec.Core\Thaumatec.Core.csproj" />
     <ProjectReference Include="..\Thaumatec.MqttServer\Thaumatec.MqttServer.csproj" />
+	  <ProjectReference Include="..\Thaumatec.Migration\Thaumatec.MongoMigrations.csproj" />
   </ItemGroup>
 
 </Project>

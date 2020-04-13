@@ -15,9 +15,4 @@
     <ItemGroup>
 	    <ProjectReference Include="..\Thaumatec.Core\Thaumatec.Core.csproj" />
     </ItemGroup>
-
-
-    <ItemGroup>
-      <Folder Include="Scripts\" />
-    </ItemGroup>
 </Project>

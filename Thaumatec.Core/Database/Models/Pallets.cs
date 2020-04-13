@@ -6,6 +6,8 @@ using Mongo.Migration.Documents.Attributes;
 namespace Thaumatec.Core.Database.Models
 {
     [CollectionLocation("Pallets", "Pallets")]
+    [StartUpVersion("0.1.0")]
+    [RuntimeVersion("0.2.0")]
     public class Pallets : IDocument
     {
         [BsonId]
