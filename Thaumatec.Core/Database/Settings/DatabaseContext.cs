@@ -14,7 +14,7 @@ namespace Thaumatec.Core.Database.Settings
             _client = client;
         }
 
-        public MongoClient Client { get; }
+        public MongoClient Client { get => _client; }
         public IMongoCollection<Models.Pallets> PalletsCollection => _db.GetCollection<Models.Pallets>("Pallet");
         public IMongoQueryable<Models.Pallets> Pallets => _db.GetCollection<Models.Pallets>("Pallet").AsQueryable();
         public IMongoQueryable<VirtualPallets> VirtualPallets => _db.GetCollection<VirtualPallets>("VirtualPallet").AsQueryable();

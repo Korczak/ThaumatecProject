@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Web</AssemblyName>
-    <RootNamespace>Web</RootNamespace>
+    <AssemblyName>Thaumatec.Web</AssemblyName>
+    <RootNamespace>Thaumatec.Web</RootNamespace>
     <ApplicationIcon />
     <Win32Resource />
   </PropertyGroup>
@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Thaumatec.Core\Thaumatec.Core.csproj" />
+    <ProjectReference Include="..\Thaumatec.MqttServer\Thaumatec.MqttServer.csproj" />
   </ItemGroup>
 
 </Project>

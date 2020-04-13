@@ -30,7 +30,7 @@ namespace Thaumatec.Core.Database.Settings
 
             _client = new MongoClient(config.ConnectionString);
             _db = Client.GetDatabase(config.DatabaseName);
-
+            isConnectionEstablished = true;
         }
 
         public static void SetConnection(string connectionString, string databaseName)
@@ -39,7 +39,8 @@ namespace Thaumatec.Core.Database.Settings
                 return;
 
             _client = new MongoClient(connectionString);
-            _db = Client.GetDatabase(databaseName);
+            _db = Client.GetDatabase(databaseName); 
+            isConnectionEstablished = true;
         }
     }
 }

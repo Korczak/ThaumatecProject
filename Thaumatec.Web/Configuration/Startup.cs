@@ -11,8 +11,8 @@ using Thaumatec.Web.Configuration;
 using System;
 using Serilog.Events;
 using Thaumatec.Core.Logging;
-using Mongo.Migration.Startup.DotNetCore;
-using Mongo.Migration.Startup;
+using Thaumatec.Core.Mqtt;
+using Thaumatec.MqttServer;
 
 namespace Thaumatec.Web
 {
@@ -50,12 +50,12 @@ namespace Thaumatec.Web
                 configuration.RootPath = "Frontend/dist";
             });
             
-            services.AddMigration(new MongoMigrationSettings
+            /*services.AddMigration(new MongoMigrationSettings
             {
                 ConnectionString = config.ConnectionString,
                 Database = config.DatabaseName,
                 VersionFieldName = "Version" // Optional
-            });
+            });*/
 
             services.AddSingleton(_runtimeStatus);
             services.AddSingleton<IClock>(SystemClock.Instance);
@@ -67,16 +67,23 @@ namespace Thaumatec.Web
 
             var webStartup = new WebStartup(app, env);
             var loggingStartup = new LoggingStartup(config, new LoggingPaths());
-
-            DatabaseConnection.SetConnection(config);
+            var mqttServerStartup = new MqttServerStartup(config);
+            var mqttClientStartup = new MqttClientStartup(config);
+            var databaseStartup = new DatabaseStartup(config);
 
             var webValidation = webStartup.Configure();
             var loggingValidation = loggingStartup.Configure();
+            var mqttServerValidation = mqttServerStartup.Configure();
+            var mqttClientValidation = mqttClientStartup.Configure();
+            var databaseValidation = databaseStartup.Configure();
 
             _runtimeStatus.Update(
                 configValidation,
                 webValidation,
-                loggingValidation
+                loggingValidation,
+                mqttServerValidation,
+                mqttClientValidation,
+                databaseValidation
                 );
 
             PrintStatus();
@@ -89,7 +96,12 @@ namespace Thaumatec.Web
             var allowHosts = configuration.GetValue<string>(nameof(Config.AllowedHosts));
             var serverAddress = configuration.GetValue<string>(nameof(Config.Urls));
             var logLevel = configuration.GetValue<LogEventLevel>(nameof(Config.LogLevel));
-            var config = new Config(connectionString, databaseName, allowHosts, logLevel, serverAddress);
+            var brokerHostSettings = new MqttBrokerHostSettings();
+            configuration.GetSection(nameof(MqttBrokerHostSettings)).Bind(brokerHostSettings);
+            var clientSettings = new MqttClientSettings();
+            configuration.GetSection(nameof(MqttClientSettings)).Bind(clientSettings);
+
+            var config = new Config(connectionString, databaseName, allowHosts, logLevel, serverAddress, clientSettings, brokerHostSettings);
 
             var validation = config.Validate();
 

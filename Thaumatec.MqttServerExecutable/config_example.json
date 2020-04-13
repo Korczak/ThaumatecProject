@@ -1,0 +1,10 @@
+﻿{
+  "LogLevel": "Debug",
+  "Port": 1883,
+  "Users": [
+    {
+      "UserName": "Hans",
+      "Password": "Test"
+    }
+  ]
+}

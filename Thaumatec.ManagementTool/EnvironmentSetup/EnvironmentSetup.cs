@@ -34,7 +34,7 @@ namespace Thaumatec.ManagementTool.EnvironmentSetup
             var logLevel = config?.LogLevel ?? GetLogLevel();
             var serverAddress = config?.Urls ?? GetServerAddress();
 
-            config = new Config(connectionString, databaseName, allowedHosts, logLevel, serverAddress);
+            config = new Config(connectionString, databaseName, allowedHosts, logLevel, serverAddress, null, null);
 
             Console.WriteLine($"Writing config values to {envSettings.AppSettingsPath}");
             File.WriteAllText(envSettings.AppSettingsPath, JsonConvert.SerializeObject(config, Formatting.Indented));

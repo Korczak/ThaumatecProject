@@ -38,11 +38,6 @@ namespace Thaumatec.Core.Database.Settings
             get { return _context; }
         }
 
-        public IClientSessionHandle Session
-        {
-            get { return _session; }
-        }
-
         public DateTime TransactionStartDateTime
         {
             get { return _transactionStartDateTime; }

@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.ManagementTool", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.DatabaseTest", "Thaumatec.DatabaseTest\Thaumatec.DatabaseTest.csproj", "{E57F5D17-3795-4503-933E-249BEA37A94C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thaumatec.MqttServerExecutable", "Thaumatec.MqttServerExecutable\Thaumatec.MqttServerExecutable.csproj", "{686E5D99-18E4-4107-9094-157A91C00AE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thaumatec.MqttServer", "Thaumatec.MqttServer\Thaumatec.MqttServer.csproj", "{D4930F9D-F72B-43D9-9928-C19EB0A4B37A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{E57F5D17-3795-4503-933E-249BEA37A94C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E57F5D17-3795-4503-933E-249BEA37A94C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E57F5D17-3795-4503-933E-249BEA37A94C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{686E5D99-18E4-4107-9094-157A91C00AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686E5D99-18E4-4107-9094-157A91C00AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686E5D99-18E4-4107-9094-157A91C00AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686E5D99-18E4-4107-9094-157A91C00AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4930F9D-F72B-43D9-9928-C19EB0A4B37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4930F9D-F72B-43D9-9928-C19EB0A4B37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4930F9D-F72B-43D9-9928-C19EB0A4B37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4930F9D-F72B-43D9-9928-C19EB0A4B37A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

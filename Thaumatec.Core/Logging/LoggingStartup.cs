@@ -1,6 +1,5 @@
 ﻿using Thaumatec.Core.Configuration;
 using Serilog;
-using Serilog.Context;
 using System;
 using System.IO;
 
