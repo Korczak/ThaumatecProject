@@ -7,7 +7,7 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
-export class UsersFrontend {
+export class UsersClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -17,11 +17,11 @@ export class UsersFrontend {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    register(input: UserRegisterRequest | null): Promise<UserRegisterResponse> {
+    register(request: UserRegisterRequest | null): Promise<UserRegisterResponse> {
         let url_ = this.baseUrl + "/api/users";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(input);
+        const content_ = JSON.stringify(request);
 
         let options_ = <RequestInit>{
             body: content_,
@@ -63,7 +63,7 @@ export class UsersFrontend {
     }
 }
 
-export class SelfFrontend {
+export class SelfClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -73,7 +73,7 @@ export class SelfFrontend {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    login(request: UserLoginRequest | null): Promise<UserLoginResult> {
+    login(request: UserLoginRequest | null): Promise<UserLoginResponse> {
         let url_ = this.baseUrl + "/api/self/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -93,14 +93,14 @@ export class SelfFrontend {
         });
     }
 
-    protected processLogin(response: Response): Promise<UserLoginResult> {
+    protected processLogin(response: Response): Promise<UserLoginResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            result200 = UserLoginResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -108,7 +108,7 @@ export class SelfFrontend {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserLoginResult>(<any>null);
+        return Promise.resolve<UserLoginResponse>(<any>null);
     }
 
     logout(): Promise<void> {
@@ -176,7 +176,7 @@ export class SelfFrontend {
     }
 }
 
-export class DeviceFrontend {
+export class DeviceClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -186,8 +186,11 @@ export class DeviceFrontend {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    getDevicesForUser(): Promise<GetUserDevicesResponse> {
-        let url_ = this.baseUrl + "/api/devices";
+    getDevicesForUser(id: string): Promise<GetUserDevicesResponse> {
+        let url_ = this.baseUrl + "/api/devices/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -257,6 +260,40 @@ export class DeviceFrontend {
         }
         return Promise.resolve<FileResponse | null>(<any>null);
     }
+
+    appendDevice(serialNumber: string | null | undefined): Promise<FileResponse | null> {
+        let url_ = this.baseUrl + "/api/device_connector/append_device?";
+        if (serialNumber !== undefined)
+            url_ += "serialNumber=" + encodeURIComponent("" + serialNumber) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAppendDevice(_response);
+        });
+    }
+
+    protected processAppendDevice(response: Response): Promise<FileResponse | null> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse | null>(<any>null);
+    }
 }
 
 export class UserRegisterResponse implements IUserRegisterResponse {
@@ -312,60 +349,9 @@ export enum UserRegisterStatus {
 
 export class UserRegisterRequest implements IUserRegisterRequest {
     username?: string | null;
-    role!: Role;
-
-    constructor(data?: IUserRegisterRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.username = _data["username"] !== undefined ? _data["username"] : <any>null;
-            this.role = _data["role"] !== undefined ? _data["role"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UserRegisterRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserRegisterRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["username"] = this.username !== undefined ? this.username : <any>null;
-        data["role"] = this.role !== undefined ? this.role : <any>null;
-        return data; 
-    }
-}
-
-export interface IUserRegisterRequest {
-    username?: string | null;
-    role: Role;
-}
-
-export enum Role {
-    Unknown = "Unknown",
-    User = "User",
-    Admin = "Admin",
-}
-
-export enum UserLoginResult {
-    Success = "Success",
-    PasswordOrUsernameError = "PasswordOrUsernameError",
-}
-
-export class UserLoginRequest implements IUserLoginRequest {
-    username?: string | null;
     password?: string | null;
 
-    constructor(data?: IUserLoginRequest) {
+    constructor(data?: IUserRegisterRequest) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -381,9 +367,9 @@ export class UserLoginRequest implements IUserLoginRequest {
         }
     }
 
-    static fromJS(data: any): UserLoginRequest {
+    static fromJS(data: any): UserRegisterRequest {
         data = typeof data === 'object' ? data : {};
-        let result = new UserLoginRequest();
+        let result = new UserRegisterRequest();
         result.init(data);
         return result;
     }
@@ -396,7 +382,7 @@ export class UserLoginRequest implements IUserLoginRequest {
     }
 }
 
-export interface IUserLoginRequest {
+export interface IUserRegisterRequest {
     username?: string | null;
     password?: string | null;
 }
@@ -447,6 +433,57 @@ export interface IUserLoginResponse {
     userId?: string | null;
     username?: string | null;
     role: Role;
+}
+
+export enum UserLoginResult {
+    Success = "Success",
+    PasswordOrUsernameError = "PasswordOrUsernameError",
+}
+
+export enum Role {
+    Unknown = "Unknown",
+    User = "User",
+    Admin = "Admin",
+}
+
+export class UserLoginRequest implements IUserLoginRequest {
+    username?: string | null;
+    password?: string | null;
+
+    constructor(data?: IUserLoginRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.username = _data["username"] !== undefined ? _data["username"] : <any>null;
+            this.password = _data["password"] !== undefined ? _data["password"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserLoginRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserLoginRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["username"] = this.username !== undefined ? this.username : <any>null;
+        data["password"] = this.password !== undefined ? this.password : <any>null;
+        return data; 
+    }
+}
+
+export interface IUserLoginRequest {
+    username?: string | null;
+    password?: string | null;
 }
 
 export class GetUserDevicesResponse implements IGetUserDevicesResponse {

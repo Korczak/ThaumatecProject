@@ -7,7 +7,6 @@ using Thaumatec.Core.Device.GetUserDevices;
 
 namespace Thaumatec.Web.Device
 {
-    [ApiController]
     public class DeviceController : ControllerBase
     {
         private readonly GetUserDevicesService _getUserDevicesService;

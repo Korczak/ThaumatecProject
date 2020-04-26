@@ -32,7 +32,7 @@ namespace Thaumatec.Web.Users
         /// </summary>
         [AllowAnonymous]
         [HttpPost("api/self/login")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserLoginResult))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserLoginResponse))]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             var result = await _userLoginService.Login(request);

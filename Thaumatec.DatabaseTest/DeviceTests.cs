@@ -2,14 +2,14 @@ using Thaumatec.Core.Database.Settings;
 using Thaumatec.DatabaseTest.Configuration;
 using System;
 using Xunit;
-using Thaumatec.Core.Database.Models;
+using Thaumatec.Core.Database.Models.Device;
 
 namespace Thaumatec.DatabaseTest
 {
     [Collection("Database")]
-    public sealed class PalletTests : IDisposable
+    public sealed class DeviceTests : IDisposable
     {
-        public PalletTests()
+        public DeviceTests()
         {
             DatabaseSetup.Setup();
         }
@@ -24,7 +24,7 @@ namespace Thaumatec.DatabaseTest
         {
             using(var handler = new DatabaseHandler())
             {
-                await handler.db.PalletsCollection.InsertOneAsync(new Pallets() { RFID = "1" });
+                await handler.db.Devices.InsertOneAsync(new Devices() { Name = "Nowe urzadzenie testowe" });
             }
         }
     }

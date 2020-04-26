@@ -5,8 +5,8 @@
     "webApiToOpenApi": {
       "controllerNames": [
         "Thaumatec.Web.Users.UsersController",
-		"Thaumatec.Web.Users.SelfController",
-		"Thaumatec.Web.Device.DeviceController"
+        "Thaumatec.Web.Users.SelfController",
+        "Thaumatec.Web.Device.DeviceController"
       ],
       "isAspNetCore": true,
       "resolveJsonOptions": false,
@@ -58,7 +58,7 @@
   },
   "codeGenerators": {
     "openApiToTypeScriptClient": {
-      "className": "{controller}Frontend",
+      "className": "{controller}Client",
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 2.7,
