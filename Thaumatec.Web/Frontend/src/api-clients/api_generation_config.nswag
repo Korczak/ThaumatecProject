@@ -1,10 +1,12 @@
 ﻿{
-  "runtime": "NetCore30",
+  "runtime": "NetCore31",
   "defaultVariables": "",
   "documentGenerator": {
     "webApiToOpenApi": {
       "controllerNames": [
-        "Web"
+        "Thaumatec.Web.Users.UsersController",
+		"Thaumatec.Web.Users.SelfController",
+		"Thaumatec.Web.Device.DeviceController"
       ],
       "isAspNetCore": true,
       "resolveJsonOptions": false,
@@ -47,7 +49,7 @@
       "output": null,
       "outputType": "Swagger2",
       "assemblyPaths": [
-        "../../../bin/Debug/netcoreapp3.0/EKFD.Web.dll"
+        "../../../bin/Debug/netcoreapp3.1/Thaumatec.Web.dll"
       ],
       "assemblyConfig": null,
       "referencePaths": [],
@@ -56,7 +58,7 @@
   },
   "codeGenerators": {
     "openApiToTypeScriptClient": {
-      "className": "{controller}Client",
+      "className": "{controller}Frontend",
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 2.7,

@@ -52,7 +52,7 @@ namespace Thaumatec.Core.Mqtt
         {
             Log.Information("Client has disconnected");
             Log.Information("Trying to reconnect...");
-            ReconnectClient();
+            ReconnectClient().GetAwaiter();
             if (_client.IsConnected)
             {
                 Log.Information("Client reconnected");
