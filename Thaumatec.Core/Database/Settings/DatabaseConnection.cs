@@ -2,8 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
-using Mongo.Migration.Startup.Static;
-using Mongo.Migration.Startup;
+using MongoDb.Bson.NodaTime;
 
 namespace Thaumatec.Core.Database.Settings
 {
@@ -23,6 +22,9 @@ namespace Thaumatec.Core.Database.Settings
                 new EnumRepresentationConvention(BsonType.String)
             };
             ConventionRegistry.Register("EnumStringConvention", pack, t => true);
+
+            //NodaTime Serializer
+            NodaTimeSerializers.Register();
         }
 
         public static void SetConnection(Config config)

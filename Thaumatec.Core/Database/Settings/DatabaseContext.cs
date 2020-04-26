@@ -1,6 +1,4 @@
 ﻿using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using Thaumatec.Core.Database.Models;
 
 namespace Thaumatec.Core.Database.Settings
 {
@@ -15,9 +13,9 @@ namespace Thaumatec.Core.Database.Settings
         }
 
         public MongoClient Client { get => _client; }
-        public IMongoCollection<Models.Pallets> PalletsCollection => _db.GetCollection<Models.Pallets>("Pallet");
-        public IMongoQueryable<Models.Pallets> Pallets => _db.GetCollection<Models.Pallets>("Pallet").AsQueryable();
-        public IMongoQueryable<VirtualPallets> VirtualPallets => _db.GetCollection<VirtualPallets>("VirtualPallet").AsQueryable();
+        public IMongoCollection<Models.Device.Devices> Devices => _db.GetCollection<Models.Device.Devices>("Device");
+        public IMongoCollection<Models.User.Users> Users => _db.GetCollection<Models.User.Users>("User");
+        public IMongoCollection<Models.UserDevice.UserDevices> UserDevices => _db.GetCollection<Models.UserDevice.UserDevices>("UserDevices");
 
     }
 }
