@@ -9,7 +9,6 @@ using Newtonsoft.Json.Converters;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
 using System.Linq;
-using Swashbuckle.AspNetCore.SwaggerUI;
 using Thaumatec.Core.Logging;
 
 namespace Thaumatec.Web.Configuration
@@ -28,37 +27,34 @@ namespace Thaumatec.Web.Configuration
 
         public IStartupValidation Configure()
         {
-            if(_env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 _app.UseDeveloperExceptionPage();
             }
 
-            _app.UseRouting();
+            _app.UseOpenApi();
+            _app.UseSwaggerUi3();
 
-            _app.UseMvc();
-
-            _app.UseSpaStaticFiles();
 
             _app.UseMiddleware<ErrorLoggingMiddleware>();
+            _app.UseRouting();
+            _app.UseAuthentication();
+            _app.UseMvc();
 
-            _app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "Client";
-                if (_env.IsDevelopment())
+            _app.MapWhen(
+                x => !x.Request.Path.Value.StartsWith("/swagger"),
+                configuration =>
                 {
-                    spa.UseProxyToSpaDevelopmentServer(DEVELOPMENT_CLIENT_URL);
+                    configuration.UseSpa(spa =>
+                    {
+                        spa.Options.SourcePath = "Client";
+                        if (_env.IsDevelopment())
+                        {
+                            spa.UseProxyToSpaDevelopmentServer(DEVELOPMENT_CLIENT_URL);
+                        }
+                    });
                 }
-            });
-
-            _app.UseSwaggerUI(o =>
-            {
-                o.RoutePrefix = "api";
-                o.DocumentTitle = "ThaumatecProject API";
-                o.SwaggerEndpoint("/api/swagger.json", "ThaumatecProject API v1");
-                o.DisplayRequestDuration();
-                o.DocExpansion(DocExpansion.List);
-                o.DefaultModelRendering(ModelRendering.Model);
-            });
+            );
 
 
             var address = _app.ServerFeatures.Get<IServerAddressesFeature>()?.Addresses?.FirstOrDefault();

@@ -13,8 +13,8 @@ using Serilog.Events;
 using Thaumatec.Core.Logging;
 using Thaumatec.Core.Mqtt;
 using Thaumatec.MqttServer;
-using Mongo.Migration.Startup;
-using Mongo.Migration.Startup.DotNetCore;
+using System.Reflection;
+using System.Linq;
 
 namespace Thaumatec.Web
 {
@@ -46,14 +46,11 @@ namespace Thaumatec.Web
                     options.SerializerSettings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
-
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "Frontend/dist";
-            });
             
             services.AddSingleton(_runtimeStatus);
             services.AddSingleton<IClock>(SystemClock.Instance);
+
+            AutoConfigureServices(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -138,6 +135,21 @@ namespace Thaumatec.Web
             
             Console.ForegroundColor = originalForeground;
             Console.BackgroundColor = originalBackground;
+        }
+
+        private void AutoConfigureServices(IServiceCollection services)
+        {
+            var serviceStartupTypes = Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => typeof(IServiceStartup).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                .ToArray();
+
+            foreach (var type in serviceStartupTypes)
+            {
+                var instance = (IServiceStartup)Activator.CreateInstance(type);
+                instance.ConfigureServices(services);
+            }
         }
     }
 }
