@@ -20,7 +20,7 @@ namespace Thaumatec.Core.Users.Register
                     {
                         Name = change.Username,
                         Password = change.HashedPassword,
-                        Role = Constants.Role.Admin
+                        Role = Constants.Role.User
                     };
 
                     await handler.db.Users.InsertOneAsync(user);

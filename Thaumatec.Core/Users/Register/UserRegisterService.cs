@@ -20,7 +20,7 @@ namespace Thaumatec.Core.Users.Register
         {
             var hashedPassword = _hashGenerator.HashPassword(input.Password);
 
-            var change = new UserRegistered(input.Username, hashedPassword, input.Role, registeringUser);
+            var change = new UserRegistered(input.Username, hashedPassword, registeringUser);
 
             await _access.RegisterUser(change);
             return new UserRegisterResponse(UserRegisterStatus.Success, input.Username, input.Password);
