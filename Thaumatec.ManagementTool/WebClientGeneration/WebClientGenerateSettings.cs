@@ -10,7 +10,7 @@ namespace Thaumatec.ManagementTool.WebClientGeneration
         public WebClientGenerateSettings(Solution solution)
         {
             var solutionRoot = solution.SolutionRoot;
-            NswagConfigPath = Path.Combine(solutionRoot, "Web", "Frontend", "src", "api-clients", "api_generation_config.json");
+            NswagConfigPath = Path.Combine(solutionRoot, "Thaumatec.Web", "Frontend", "src", "api-clients", "api_generation_config.nswag");
         }
     }
 }

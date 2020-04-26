@@ -20,7 +20,7 @@ namespace Thaumatec.ManagementTool
 
             while(iteration < tryLimit)
             {
-                string tryPath = Path.Combine(path, "Web");
+                string tryPath = Path.Combine(path, "Thaumatec.Web");
 
                 if(Directory.Exists(tryPath))
                 {

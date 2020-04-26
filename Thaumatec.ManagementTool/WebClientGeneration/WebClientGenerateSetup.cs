@@ -28,14 +28,14 @@ namespace Thaumatec.ManagementTool.WebClientGeneration
                 return;
             }
             Console.WriteLine("Generating web client by nswag");
-            NswagRun($"run { settings.NswagConfigPath } /runtime:NetCore30");
+            NswagRun($"run { settings.NswagConfigPath } /runtime:NetCore31");
         }
 
         private static void NswagRun(string command)
         {
             try
             {
-                File.WriteAllText("nswag_run_temp.bat", $"@echo off\r\nnswag {command}");
+                File.WriteAllText("nswag_run_temp.bat", $"@echo off\r\ndotnet-nswag {command}");
 
                 var startInfo = new ProcessStartInfo()
                 {
@@ -60,7 +60,7 @@ namespace Thaumatec.ManagementTool.WebClientGeneration
         {
             var startInfo = new ProcessStartInfo()
             {
-                FileName = "nswag",
+                FileName = "dotnet-nswag",
                 Arguments = command,
                 UseShellExecute = true,
                 WindowStyle = ProcessWindowStyle.Hidden
@@ -74,7 +74,7 @@ namespace Thaumatec.ManagementTool.WebClientGeneration
             {
                 var startInfo = new ProcessStartInfo()
                 {
-                    FileName = "nswag",
+                    FileName = "dotnet-nswag",
                     Arguments = "version",
                     UseShellExecute = true,
                     WindowStyle = ProcessWindowStyle.Hidden
