@@ -8,12 +8,12 @@ namespace Thaumatec.Core.Device.AppendDeviceToUser
     public class AppendDeviceToUserInput
     {
         public string SerialNumber { get; }
-        public ObjectId UserId { get; }
+        public string Username{ get; }
 
-        public AppendDeviceToUserInput(string serialNumber, ObjectId userId)
+        public AppendDeviceToUserInput(string serialNumber, string username)
         {
             SerialNumber = serialNumber;
-            UserId = userId;
+            Username = username;
         }
     }
 }

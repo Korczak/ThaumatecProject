@@ -20,9 +20,20 @@ namespace Thaumatec.Core.Device.GetUserDevices
                 var devicesQuery = from userDevices in handler.db.UserDevices.AsQueryable()
                                    where userDevices.UserId == userId
                                    join devices in handler.db.Devices.AsQueryable() on userDevices.DeviceId equals devices.Id
-                                   select new GetUserDeviceItem(devices.Name, devices.LastUpdateDateTime, devices.LastPrintDateTime, devices.Status);
+                                   select new GetUserDeviceItem(devices.Name, devices.LastUpdateDateTime, devices.LastPrintDateTime, devices.Location, devices.Status);
 
                 return await devicesQuery.ToListAsync();
+            }
+        }
+
+        public async Task<ObjectId> GetUserId(string username)
+        {
+            using (var handler = new DatabaseHandler())
+            {
+                return await handler.db.Users.AsQueryable()
+                    .Where(x => x.Name == username)
+                    .Select(x => x.Id)
+                    .FirstOrDefaultAsync();
             }
         }
     }

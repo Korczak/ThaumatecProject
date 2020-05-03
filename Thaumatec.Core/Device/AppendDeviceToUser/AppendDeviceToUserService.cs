@@ -14,20 +14,25 @@ namespace Thaumatec.Core.Device.AppendDeviceToUser
             _access = access;
         }
 
-        public Task AppendDevice(AppendDeviceToUserInput input)
+        public Task<AppendDeviceToUserResponse> AppendDevice(AppendDeviceToUserInput input)
         {
             if (input == null) throw new ArgumentNullException(nameof(input));
 
             return InternalAppendDevice(input);
         }
 
-        private async Task InternalAppendDevice(AppendDeviceToUserInput input)
+        private async Task<AppendDeviceToUserResponse> InternalAppendDevice(AppendDeviceToUserInput input)
         {
             var deviceId = await _access.GetDeviceId(input.SerialNumber);
-            if (deviceId == default)
-                return;
+            var userId = await _access.GetUserId(input.Username);
 
-            await _access.AppendDeviceToUser(deviceId, input.UserId);
+            if (deviceId == default)
+                return AppendDeviceToUserResponse.Failure(AppendDeviceToUserResult.DeviceNotExist);
+            if (userId == default)
+                return AppendDeviceToUserResponse.Failure(AppendDeviceToUserResult.UserNotExist);
+
+            await _access.AppendDeviceToUser(deviceId, userId);
+            return AppendDeviceToUserResponse.Success();
         }
     }
 }

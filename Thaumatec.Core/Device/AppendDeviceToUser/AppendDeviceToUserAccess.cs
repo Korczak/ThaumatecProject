@@ -37,6 +37,17 @@ namespace Thaumatec.Core.Device.AppendDeviceToUser
             }
         }
 
+        public async Task<ObjectId> GetUserId(string username)
+        {
+            using (var handler = new DatabaseHandler())
+            {
+                return await handler.db.Users.AsQueryable()
+                    .Where(x => x.Name == username)
+                    .Select(x => x.Id)
+                    .FirstOrDefaultAsync();
+            }
+        }
+
         public async Task<ObjectId> GetDeviceId(string serialNumber)
         {
             using (var handler = new DatabaseHandler())

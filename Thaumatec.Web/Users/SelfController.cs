@@ -77,9 +77,6 @@ namespace Thaumatec.Web.Users
             {
                 string username = User.GetClaim(CustomClaimTypes.Username);
                 string roleString = User.GetClaim(ClaimTypes.Role);
-                string firstLoginString = User.GetClaim(CustomClaimTypes.FirstLogin);
-
-                bool.TryParse(firstLoginString, out bool firstLogin);
 
                 Enum.TryParse<Role>(roleString, out var role);
 
