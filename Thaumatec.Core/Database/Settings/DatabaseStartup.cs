@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Thaumatec.Core.Configuration;
+﻿using Thaumatec.Core.Configuration;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace Thaumatec.Core.Database.Settings
 {
@@ -20,11 +19,11 @@ namespace Thaumatec.Core.Database.Settings
 
             using(var handler = new DatabaseHandler())
             {
-                if (handler.db != null)
+                bool isMongoLive = handler.db.Database.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
+                if(isMongoLive)
                     return DatabaseValidation.Successfull();
+                return DatabaseValidation.Failure();
             }
-
-            return DatabaseValidation.Failure();
         }
     }
 }
