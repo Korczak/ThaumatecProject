@@ -5,7 +5,9 @@ import router from "@/router";
 import UserData from "@/users/user-data";
 
 import {
-	SelfClient, UsersClient
+	SelfClient,
+	UsersClient,
+	DeviceClient
 } from "./api-clients/ClientsGenerated";
 
 Vue.config.productionTip = false;
@@ -22,6 +24,7 @@ new Vue({
 	render: h => h(App),
 	provide: {
 		selfClient: new SelfClient(),
-		usersClient: new UsersClient()
+		usersClient: new UsersClient(),
+		deviceClient: new DeviceClient()
 	}
 }).$mount("#app");

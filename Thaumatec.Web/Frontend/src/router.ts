@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router, { Route } from "vue-router";
 import Home from "@/home/Home.vue";
 import LoginMain from "@/login/LoginMain.vue";
+import DeviceMain from "@/device/DeviceMain.vue";
 
 Vue.use(Router);
 
@@ -16,6 +17,16 @@ export default new Router({
 			path: "/",
 			component: Home,
 			name: "Home"
+		},
+		{
+			path: "devices",
+			component: DeviceMain,
+			name: "DeviceList"
+		},
+		{
+			path: "login",
+			component: LoginMain,
+			name: "Login"
 		}
 	]
 });

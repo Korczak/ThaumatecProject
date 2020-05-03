@@ -186,11 +186,8 @@ export class DeviceClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    getDevicesForUser(id: string): Promise<GetUserDevicesResponse> {
-        let url_ = this.baseUrl + "/api/devices/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    getDevicesForUser(): Promise<GetUserDevicesResponse> {
+        let url_ = this.baseUrl + "/api/user/devices";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -487,6 +484,7 @@ export interface IUserLoginRequest {
 }
 
 export class GetUserDevicesResponse implements IGetUserDevicesResponse {
+    success!: boolean;
     devices?: GetUserDeviceItem[] | null;
 
     constructor(data?: IGetUserDevicesResponse) {
@@ -507,6 +505,7 @@ export class GetUserDevicesResponse implements IGetUserDevicesResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.success = _data["success"] !== undefined ? _data["success"] : <any>null;
             if (Array.isArray(_data["devices"])) {
                 this.devices = [] as any;
                 for (let item of _data["devices"])
@@ -524,6 +523,7 @@ export class GetUserDevicesResponse implements IGetUserDevicesResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["success"] = this.success !== undefined ? this.success : <any>null;
         if (Array.isArray(this.devices)) {
             data["devices"] = [];
             for (let item of this.devices)
@@ -534,6 +534,7 @@ export class GetUserDevicesResponse implements IGetUserDevicesResponse {
 }
 
 export interface IGetUserDevicesResponse {
+    success: boolean;
     devices?: IGetUserDeviceItem[] | null;
 }
 
@@ -541,6 +542,7 @@ export class GetUserDeviceItem implements IGetUserDeviceItem {
     name?: string | null;
     lastUpdateDateTime!: string;
     lastPrintDateTime!: string;
+    location?: string | null;
     status!: DeviceStatus;
 
     constructor(data?: IGetUserDeviceItem) {
@@ -557,6 +559,7 @@ export class GetUserDeviceItem implements IGetUserDeviceItem {
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.lastUpdateDateTime = _data["lastUpdateDateTime"] !== undefined ? _data["lastUpdateDateTime"] : <any>null;
             this.lastPrintDateTime = _data["lastPrintDateTime"] !== undefined ? _data["lastPrintDateTime"] : <any>null;
+            this.location = _data["location"] !== undefined ? _data["location"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
         }
     }
@@ -573,6 +576,7 @@ export class GetUserDeviceItem implements IGetUserDeviceItem {
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["lastUpdateDateTime"] = this.lastUpdateDateTime !== undefined ? this.lastUpdateDateTime : <any>null;
         data["lastPrintDateTime"] = this.lastPrintDateTime !== undefined ? this.lastPrintDateTime : <any>null;
+        data["location"] = this.location !== undefined ? this.location : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         return data; 
     }
@@ -582,6 +586,7 @@ export interface IGetUserDeviceItem {
     name?: string | null;
     lastUpdateDateTime: string;
     lastPrintDateTime: string;
+    location?: string | null;
     status: DeviceStatus;
 }
 

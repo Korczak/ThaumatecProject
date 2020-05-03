@@ -4,6 +4,8 @@ using MongoDB.Bson;
 using Thaumatec.Core.Device.AddNewDevice;
 using Thaumatec.Core.Device.AppendDeviceToUser;
 using Thaumatec.Core.Device.GetUserDevices;
+using Thaumatec.Core.Users;
+using Thaumatec.Core.Users.UserRole;
 
 namespace Thaumatec.Web.Device
 {
@@ -23,11 +25,13 @@ namespace Thaumatec.Web.Device
             _appendDeviceToUserService = appendDeviceToUserService;
         }
 
-        [HttpGet("/api/devices/{id}")]
+        [HttpGet("/api/user/devices/")]
         [Produces(typeof(GetUserDevicesResponse))]
-        public async Task<IActionResult> GetDevicesForUser(string id)
+        public async Task<IActionResult> GetDevicesForUser()
         {
-            var response = await _getUserDevicesService.GetUserDevices(new ObjectId(id));
+            var username = User.GetClaim(CustomClaimTypes.Username);
+
+            var response = await _getUserDevicesService.GetUserDevices(username);
 
             return Ok(response);
         }
@@ -43,7 +47,9 @@ namespace Thaumatec.Web.Device
         [HttpPost("/api/device_connector/append_device")]
         public async Task<IActionResult> AppendDevice(AppendDeviceToUserRequest request)
         {
-            var input = new AppendDeviceToUserInput(request.SerialNumber, new ObjectId("5ea468bb8fb72137e41523f9"));
+            var username = User.GetClaim(CustomClaimTypes.Username);
+
+            var input = new AppendDeviceToUserInput(request.SerialNumber, username);
             await _appendDeviceToUserService.AppendDevice(input);
 
             return Ok();

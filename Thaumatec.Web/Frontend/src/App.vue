@@ -3,7 +3,11 @@
 		<v-app-bar app>
 			<router-link :to="{ name: 'Home' }"> </router-link>
 
-			<v-tabs v-if="userData.validUser"> </v-tabs>
+			<v-tabs v-if="userData.validUser">
+				<v-tab :to="{ name: 'DeviceList' }">
+					{{ translation.DeviceList }}
+				</v-tab>
+			</v-tabs>
 		</v-app-bar>
 		<v-content v-if="loadComplete">
 			<router-view v-if="userData.validUser" />

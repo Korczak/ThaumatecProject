@@ -1,4 +1,8 @@
-import { Role, UserLoginResponse, UserRegisterResponse } from "@/api-clients/ClientsGenerated";
+import {
+	Role,
+	UserLoginResponse,
+	UserRegisterResponse
+} from "@/api-clients/ClientsGenerated";
 import { RawLocation } from "vue-router";
 
 export default class UserData {

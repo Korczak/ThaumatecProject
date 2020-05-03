@@ -50,6 +50,28 @@
 				<slot name="login"></slot>
 			</v-container>
 		</v-card-text>
+		<v-dialog v-model="showDialog" width="260">
+			<v-card>
+				<v-container>
+					<v-row justify="center">
+						<v-card-title>{{
+							translation.Registered
+						}}</v-card-title>
+					</v-row>
+					<v-row justify="center">
+						<v-card-actions>
+							<v-btn
+								@click.prevent="$emit('onDone')"
+								type="submit"
+								color="orange"
+								class="white--text"
+								>{{ translation.Submit }}</v-btn
+							>
+						</v-card-actions>
+					</v-row>
+				</v-container>
+			</v-card>
+		</v-dialog>
 	</v-form>
 </template>
 
@@ -60,7 +82,7 @@ import Rules from "@/rules/rules";
 import {
 	UserRegisterRequest,
 	UsersClient,
-  UserRegisterStatus
+	UserRegisterStatus
 } from "../api-clients/ClientsGenerated";
 import { globalStore } from "@/main";
 @Component({})
@@ -72,6 +94,7 @@ export default class Register extends Mixins(Translation) {
 	passwordRepeatError: string | null = null;
 	valid = false;
 	errorVisible = false;
+	showDialog = false;
 
 	usernameRequired = this.requiredRule("Username");
 	passwordRequired = this.requiredRule("Password");
@@ -85,7 +108,6 @@ export default class Register extends Mixins(Translation) {
 		];
 	}
 	async register() {
-        console.log(this.password +" " + this.passwordRepeat);
 		if (this.password !== this.passwordRepeat) {
 			this.passwordRepeatError = this.translation.PasswordMustMatch;
 			return;
@@ -99,8 +121,9 @@ export default class Register extends Mixins(Translation) {
 		const response = await this.usersClient.register(request);
 
 		if (response.status == UserRegisterStatus.Success) {
-			globalStore.userData.register(response);
+			this.showDialog = true;
 		} else {
+			console.log("someting gone wrong");
 			globalStore.userData.logout();
 			this.errorVisible = true;
 		}

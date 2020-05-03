@@ -15,7 +15,7 @@
 						</v-card-actions>
 					</template>
 				</login>
-                <register v-else>
+				<register v-else @onDone="isLogging = true">
 					<template slot="login">
 						<v-card-actions>
 							<v-btn
@@ -50,15 +50,15 @@ import Register from "./Register.vue";
 @Component({ components: { Login, Register } })
 export default class LoginMain extends Mixins(Translation) {
 	@Inject() readonly selfClient!: SelfClient;
-    isLogging: boolean = true;
+	isLogging: boolean = true;
 
-    register() {
-        this.isLogging = false;
-    }
+	register() {
+		this.isLogging = false;
+	}
 
-    login() {
-        this.isLogging = true;
-    }
+	login() {
+		this.isLogging = true;
+	}
 }
 </script>
 <style scoped>

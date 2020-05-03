@@ -49,6 +49,7 @@ namespace Thaumatec.Web
             
             services.AddSingleton(_runtimeStatus);
             services.AddSingleton<IClock>(SystemClock.Instance);
+            services.AddSwaggerDocument();
 
             AutoConfigureServices(services);
         }
