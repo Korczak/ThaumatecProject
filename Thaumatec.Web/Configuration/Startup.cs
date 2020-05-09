@@ -15,6 +15,10 @@ using Thaumatec.Core.Mqtt;
 using Thaumatec.MqttServer;
 using System.Reflection;
 using System.Linq;
+using MQTTnet.Client.Options;
+using Thaumatec.Web.DeviceConnector;
+using Thaumatec.Core.DeviceConnector.ActualStatus;
+using Thaumatec.Core.DeviceConnector.Initialize;
 
 namespace Thaumatec.Web
 {
@@ -51,6 +55,14 @@ namespace Thaumatec.Web
             services.AddSingleton<IClock>(SystemClock.Instance);
             services.AddSwaggerDocument();
 
+
+            var mqttClientOptions = new MqttClientOptionsBuilder()
+               .WithClientId(config.ClientSettings.Id)
+               .WithTcpServer(config.BrokerSettings.Host, config.BrokerSettings.Port)
+               .WithCredentials(config.ClientSettings.UserName, config.ClientSettings.Password)
+               .Build();
+            services.AddSingleton<IMqttClientOptions>(mqttClientOptions);
+
             AutoConfigureServices(services);
         }
 
@@ -61,13 +73,11 @@ namespace Thaumatec.Web
             var webStartup = new WebStartup(app, env);
             var loggingStartup = new LoggingStartup(config, new LoggingPaths());
             var mqttServerStartup = new MqttServerStartup(config);
-            var mqttClientStartup = new MqttClientStartup(config);
             var databaseStartup = new DatabaseStartup(config);
 
             var webValidation = webStartup.Configure();
             var loggingValidation = loggingStartup.Configure();
             var mqttServerValidation = mqttServerStartup.Configure();
-            var mqttClientValidation = mqttClientStartup.Configure();
             var databaseValidation = databaseStartup.Configure();
 
             _runtimeStatus.Update(
@@ -75,11 +85,12 @@ namespace Thaumatec.Web
                 webValidation,
                 loggingValidation,
                 mqttServerValidation,
-                mqttClientValidation,
                 databaseValidation
                 );
 
             PrintStatus();
+
+            AutoConfigureControllers(app);
         }
 
         private (Config config, ConfigurationValidation configurationValidation) GetConfig(IConfiguration configuration)
@@ -150,6 +161,21 @@ namespace Thaumatec.Web
             {
                 var instance = (IServiceStartup)Activator.CreateInstance(type);
                 instance.ConfigureServices(services);
+            }
+        }
+
+        private void AutoConfigureControllers(IApplicationBuilder app)
+        {
+            var serviceStartupTypes = Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => typeof(IControllerStartup).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                .ToArray();
+
+            foreach (var type in serviceStartupTypes)
+            {
+                var instance = (IControllerStartup)Activator.CreateInstance(type);
+                instance.ConfigureController(app);
             }
         }
     }

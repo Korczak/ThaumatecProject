@@ -3,22 +3,23 @@ using MQTTnet.Client;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using Serilog;
+using System;
 using System.Threading.Tasks;
 
 namespace Thaumatec.Core.Mqtt
 {
-    public static class MqttClientConnection
+    public class MqttClientConnection
     {
-        public static IMqttClient Client { get => _client; }
-        private static IMqttClient _client;
-        private static bool _isConnectionEstablished = false;
+        public IMqttClient Client { get => _client; }
+        private IMqttClient _client;
+        private bool _isConnectionEstablished = false;
 
-        static MqttClientConnection()
+        public MqttClientConnection()
         {
             _client = new MqttFactory().CreateMqttClient();
         } 
 
-        public static async Task SetConnection(IMqttClientOptions options)
+        public async Task SetConnection(IMqttClientOptions options, Action<MqttApplicationMessageReceivedEventArgs> onMessage)
         {
             if (_isConnectionEstablished)
                 return;
@@ -31,24 +32,17 @@ namespace Thaumatec.Core.Mqtt
 
             if (_client.IsConnected)
             {
-                await _client.SubscribeAsync("hello/world");
                 Log.Information("Client is connected");
             }
             else
             {
                 Log.Error("Client could not connect");
             }
-
-            _client.UseApplicationMessageReceivedHandler(OnMessage);
+            _client.UseApplicationMessageReceivedHandler(onMessage);
             _client.UseDisconnectedHandler(OnDisconnect);
         }
 
-        public static void OnMessage(MqttApplicationMessageReceivedEventArgs eventArgs)
-        {
-            Log.Information("A message is received");
-        }
-
-        public static void OnDisconnect(MqttClientDisconnectedEventArgs eventArgs)
+        public void OnDisconnect(MqttClientDisconnectedEventArgs eventArgs)
         {
             Log.Information("Client has disconnected");
             Log.Information("Trying to reconnect...");
@@ -64,7 +58,7 @@ namespace Thaumatec.Core.Mqtt
         }
 
 
-        private static async Task ReconnectClient(int numTry = 30)
+        private async Task ReconnectClient(int numTry = 30)
         {
             int numOfAttempts = 0;
             while (numOfAttempts < numTry)

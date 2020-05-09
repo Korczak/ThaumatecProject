@@ -220,19 +220,17 @@ export class DeviceClient {
         return Promise.resolve<GetUserDevicesResponse>(<any>null);
     }
 
-    addNewDevice(name: string | null | undefined, location: string | null | undefined, serialNumber: string | null | undefined): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/api/devices?";
-        if (name !== undefined)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
-        if (location !== undefined)
-            url_ += "location=" + encodeURIComponent("" + location) + "&";
-        if (serialNumber !== undefined)
-            url_ += "serialNumber=" + encodeURIComponent("" + serialNumber) + "&";
+    addNewDevice(request: AddNewDeviceRequest | null): Promise<FileResponse | null> {
+        let url_ = this.baseUrl + "/api/devices";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ = <RequestInit>{
+            body: content_,
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -258,15 +256,17 @@ export class DeviceClient {
         return Promise.resolve<FileResponse | null>(<any>null);
     }
 
-    appendDevice(serialNumber: string | null | undefined): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/api/device_connector/append_device?";
-        if (serialNumber !== undefined)
-            url_ += "serialNumber=" + encodeURIComponent("" + serialNumber) + "&";
+    appendDevice(request: AppendDeviceToUserRequest | null): Promise<AppendDeviceToUserResponse> {
+        let url_ = this.baseUrl + "/api/device_connector/append_device";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(request);
+
         let options_ = <RequestInit>{
+            body: content_,
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -276,20 +276,22 @@ export class DeviceClient {
         });
     }
 
-    protected processAppendDevice(response: Response): Promise<FileResponse | null> {
+    protected processAppendDevice(response: Response): Promise<AppendDeviceToUserResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AppendDeviceToUserResponse.fromJS(resultData200);
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse | null>(<any>null);
+        return Promise.resolve<AppendDeviceToUserResponse>(<any>null);
     }
 }
 
@@ -595,6 +597,128 @@ export enum DeviceStatus {
     Active = "Active",
     Printing = "Printing",
     Aborting = "Aborting",
+}
+
+export class AddNewDeviceRequest implements IAddNewDeviceRequest {
+    name?: string | null;
+    location?: string | null;
+    serialNumber?: string | null;
+
+    constructor(data?: IAddNewDeviceRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.location = _data["location"] !== undefined ? _data["location"] : <any>null;
+            this.serialNumber = _data["serialNumber"] !== undefined ? _data["serialNumber"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AddNewDeviceRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddNewDeviceRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["location"] = this.location !== undefined ? this.location : <any>null;
+        data["serialNumber"] = this.serialNumber !== undefined ? this.serialNumber : <any>null;
+        return data; 
+    }
+}
+
+export interface IAddNewDeviceRequest {
+    name?: string | null;
+    location?: string | null;
+    serialNumber?: string | null;
+}
+
+export class AppendDeviceToUserResponse implements IAppendDeviceToUserResponse {
+    result!: AppendDeviceToUserResult;
+
+    constructor(data?: IAppendDeviceToUserResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.result = _data["result"] !== undefined ? _data["result"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppendDeviceToUserResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppendDeviceToUserResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["result"] = this.result !== undefined ? this.result : <any>null;
+        return data; 
+    }
+}
+
+export interface IAppendDeviceToUserResponse {
+    result: AppendDeviceToUserResult;
+}
+
+export enum AppendDeviceToUserResult {
+    Success = "Success",
+    DeviceNotExist = "DeviceNotExist",
+    UserNotExist = "UserNotExist",
+}
+
+export class AppendDeviceToUserRequest implements IAppendDeviceToUserRequest {
+    serialNumber?: string | null;
+
+    constructor(data?: IAppendDeviceToUserRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.serialNumber = _data["serialNumber"] !== undefined ? _data["serialNumber"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppendDeviceToUserRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppendDeviceToUserRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["serialNumber"] = this.serialNumber !== undefined ? this.serialNumber : <any>null;
+        return data; 
+    }
+}
+
+export interface IAppendDeviceToUserRequest {
+    serialNumber?: string | null;
 }
 
 export interface FileResponse {

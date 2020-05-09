@@ -47,7 +47,6 @@
 <script lang="ts">
 import { Component, Mixins, Inject } from "vue-property-decorator";
 import Translation from "@/language/translation";
-import Rules from "@/rules/rules";
 import {
 	SelfClient,
 	UserLoginResponse,
@@ -70,7 +69,7 @@ export default class Login extends Mixins(Translation) {
 		return [
 			(v: any) =>
 				!!v ||
-				this.translation.RequiredError.replace("{0}", translatedName)
+				this.translation.Required
 		];
 	}
 	async login() {

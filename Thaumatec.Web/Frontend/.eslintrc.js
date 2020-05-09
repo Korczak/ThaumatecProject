@@ -14,6 +14,5 @@ module.exports = {
   },
   parserOptions: {
     parser: '@typescript-eslint/parser'
-  },
-  "editor.formatOnSave": true
+  }
 }

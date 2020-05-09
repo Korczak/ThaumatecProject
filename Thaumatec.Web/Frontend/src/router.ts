@@ -19,12 +19,12 @@ export default new Router({
 			name: "Home"
 		},
 		{
-			path: "devices",
+			path: "/devices",
 			component: DeviceMain,
 			name: "DeviceList"
 		},
 		{
-			path: "login",
+			path: "/login",
 			component: LoginMain,
 			name: "Login"
 		}

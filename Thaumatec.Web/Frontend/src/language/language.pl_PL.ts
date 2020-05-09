@@ -8,18 +8,23 @@ const language = {
 	Registered: "Zarejestrowano",
 	PasswordMustMatch: "Hasla musza byc takie same",
 	Login: "Loguj",
-	RequiredError: "{0} jest wymagane",
+	Required: "Pole wymagane",
 	Username: "Nazwa uzytkownika",
 	Password: "Haslo",
 	LoginError: "Logowanie nie powiodlo sie",
 	DeviceName: "Nazwa urzadzenia",
+	DeviceSerialNumber: "Numer seryjny urzadzenia",
+	DeviceLocation: "Lokalizacja",
 	DeviceList: "Urzadzenia",
 	Location: "Lokalizacja",
 	LastUpdate: "Ostatnia aktualizaja",
 	LastPrint: "Ostatni druk",
 	Status: "Status",
 	Details: "Szczegoly",
-	Submit: "Zrozumiano"
+	Submit: "Zrozumiano",
+	AddDevice: "Dodaj urzadzenie",
+	Save: "Zapisz",
+	Discard: "Wyjdz"
 };
 
 export default language;

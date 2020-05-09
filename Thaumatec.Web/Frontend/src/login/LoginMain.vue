@@ -36,7 +36,6 @@
 <script lang="ts">
 import { Component, Mixins, Inject } from "vue-property-decorator";
 import Translation from "@/language/translation";
-import Rules from "@/rules/rules";
 import {
 	SelfClient,
 	UserLoginResponse,

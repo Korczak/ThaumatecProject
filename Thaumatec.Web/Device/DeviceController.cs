@@ -25,7 +25,7 @@ namespace Thaumatec.Web.Device
             _appendDeviceToUserService = appendDeviceToUserService;
         }
 
-        [HttpGet("/api/user/devices/")]
+        [HttpGet("/api/user/devices")]
         [Produces(typeof(GetUserDevicesResponse))]
         public async Task<IActionResult> GetDevicesForUser()
         {
@@ -36,8 +36,8 @@ namespace Thaumatec.Web.Device
             return Ok(response);
         }
 
-        [HttpPost("/api/devices/")]
-        public async Task<IActionResult> AddNewDevice(AddNewDeviceRequest request)
+        [HttpPost("/api/devices")]
+        public async Task<IActionResult> AddNewDevice([FromBody] AddNewDeviceRequest request)
         {
             await _addNewDeviceService.AddNewDeice(request);
 
@@ -45,14 +45,15 @@ namespace Thaumatec.Web.Device
         }
 
         [HttpPost("/api/device_connector/append_device")]
-        public async Task<IActionResult> AppendDevice(AppendDeviceToUserRequest request)
+        [Produces(typeof(AppendDeviceToUserResponse))]
+        public async Task<IActionResult> AppendDevice([FromBody] AppendDeviceToUserRequest request)
         {
             var username = User.GetClaim(CustomClaimTypes.Username);
 
             var input = new AppendDeviceToUserInput(request.SerialNumber, username);
-            await _appendDeviceToUserService.AppendDevice(input);
+            var response = await _appendDeviceToUserService.AppendDevice(input);
 
-            return Ok();
+            return Ok(response);
         }
     }
 }

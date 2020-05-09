@@ -78,7 +78,6 @@
 <script lang="ts">
 import { Component, Mixins, Inject } from "vue-property-decorator";
 import Translation from "@/language/translation";
-import Rules from "@/rules/rules";
 import {
 	UserRegisterRequest,
 	UsersClient,
@@ -104,7 +103,7 @@ export default class Register extends Mixins(Translation) {
 		return [
 			(v: any) =>
 				!!v ||
-				this.translation.RequiredError.replace("{0}", translatedName)
+				this.translation.Required
 		];
 	}
 	async register() {
