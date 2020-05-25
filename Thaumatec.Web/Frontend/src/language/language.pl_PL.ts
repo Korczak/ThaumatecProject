@@ -13,6 +13,7 @@ const language = {
 	Password: "Haslo",
 	LoginError: "Logowanie nie powiodlo sie",
 	DeviceName: "Nazwa urzadzenia",
+	DeviceInformation: "Informacje urzadzenia",
 	DeviceSerialNumber: "Numer seryjny urzadzenia",
 	DeviceLocation: "Lokalizacja",
 	DeviceList: "Urzadzenia",
@@ -24,7 +25,20 @@ const language = {
 	Submit: "Zrozumiano",
 	AddDevice: "Dodaj urzadzenie",
 	Save: "Zapisz",
-	Discard: "Wyjdz"
+	Discard: "Wyjdz",
+	DeviceAlreadyAdded: "Urzadzenie zostalo juz dodane",
+	DeviceNotExists: "Niepoprawny Serial Number",
+	NumberOfPrintsDone: "Ilosc wykonanych drukow",
+	PrintName: "Nazwa druku",
+	StartedTime: "Czas rozpoczecia",
+	PrintingNotAvailable: "Drukarka nie jest w trakcie wydruku",
+	TemperatureBed: "Podstawy",
+	TemperatureTool0: "Narzedzie 1",
+	TemperatureTool1: "Narzedzie 2",
+	StartNewPrint: "Rozpocznij nowy druk",
+	Abort: "Przerwij",
+	PrintNotReady: "Urzadzenie nie jest gotowe",
+	FileInput: "Dodaj plik"
 };
 
 export default language;

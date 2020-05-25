@@ -19,7 +19,7 @@ namespace Thaumatec.Core.Database.Models.Device
         [BsonElement("stopped_time")]
         public LocalDateTime StoppedTime { get; set; }
         [BsonElement("temperatures")]
-        public IEnumerable<Temperatures> Temperatures { get; set; }
+        public IEnumerable<Temperatures> Temperatures { get; set; } = new List<Temperatures>() { new Device.Temperatures() { TemperatureBed = 0, TemperatureTool0 = 0, TemperatureTool1 = 0 } };
         [BsonElement("status")]
         public PrintStatus Status { get; set; }
         [BsonElement("g_code")]

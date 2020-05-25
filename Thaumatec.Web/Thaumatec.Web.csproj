@@ -5,7 +5,7 @@
     <AssemblyName>Thaumatec.Web</AssemblyName>
     <RootNamespace>Thaumatec.Web</RootNamespace>
     <ApplicationIcon />
-    <Win32Resource />
+	<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 	
   <ItemGroup>
@@ -28,12 +28,25 @@
 	<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
+    <PropertyGroup>
+	    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    </PropertyGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\Thaumatec.Core\Thaumatec.Core.csproj" />
     <ProjectReference Include="..\Thaumatec.MqttServer\Thaumatec.MqttServer.csproj" />
 	  <ProjectReference Include="..\Thaumatec.Migration\Thaumatec.MongoMigrations.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="service-info.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
 	<ItemGroup>
 		<Folder Include="Frontend\src\api-clients\" />
 	</ItemGroup>

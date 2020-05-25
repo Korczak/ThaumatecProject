@@ -31,7 +31,11 @@ namespace Thaumatec.Core.Device.AppendDeviceToUser
             if (userId == default)
                 return AppendDeviceToUserResponse.Failure(AppendDeviceToUserResult.UserNotExist);
 
-            await _access.AppendDeviceToUser(deviceId, userId);
+            var usersDeviceId = await _access.DoesDeviceBelongsToUser(userId, deviceId);
+            if (usersDeviceId != default)
+                return AppendDeviceToUserResponse.Failure(AppendDeviceToUserResult.UserAlreadyAddedThisDevice);
+
+            await _access.AppendDeviceToUser(deviceId, userId, input.Name, input.Location);
             return AppendDeviceToUserResponse.Success();
         }
     }

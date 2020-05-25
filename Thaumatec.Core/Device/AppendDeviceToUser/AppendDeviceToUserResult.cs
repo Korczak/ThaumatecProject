@@ -8,6 +8,7 @@ namespace Thaumatec.Core.Device.AppendDeviceToUser
     {
         Success,
         DeviceNotExist,
-        UserNotExist
+        UserNotExist,
+        UserAlreadyAddedThisDevice
     }
 }

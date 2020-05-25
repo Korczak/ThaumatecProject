@@ -100,11 +100,7 @@ export default class Register extends Mixins(Translation) {
 	passwordRepeatRequired = this.requiredRule("Password");
 	private requiredRule(fieldName: string): ((v: any) => string | boolean)[] {
 		const translatedName = this.getTranslatedValue(fieldName);
-		return [
-			(v: any) =>
-				!!v ||
-				this.translation.Required
-		];
+		return [(v: any) => !!v || this.translation.Required];
 	}
 	async register() {
 		if (this.password !== this.passwordRepeat) {
@@ -122,7 +118,6 @@ export default class Register extends Mixins(Translation) {
 		if (response.status == UserRegisterStatus.Success) {
 			this.showDialog = true;
 		} else {
-			console.log("someting gone wrong");
 			globalStore.userData.logout();
 			this.errorVisible = true;
 		}

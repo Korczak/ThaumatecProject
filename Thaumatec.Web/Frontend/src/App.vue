@@ -1,8 +1,15 @@
 <template>
 	<v-app>
 		<v-app-bar app>
-			<router-link :to="{ name: 'Home' }"> </router-link>
-
+			<router-link :to="{ name: 'DeviceList' }">
+				<v-img
+					alt="Thaumatec Project Home"
+					contain
+					src="@/assets/logo.svg"
+					width="200"
+					height="100"
+				></v-img>
+			</router-link>
 			<v-tabs v-if="userData.validUser">
 				<v-tab :to="{ name: 'DeviceList' }">
 					{{ translation.DeviceList }}

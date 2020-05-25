@@ -18,10 +18,12 @@ namespace Thaumatec.MqttServer
             var mqttServerLogger = new LoggerConfiguration()
                .MinimumLevel.Is(config.LogLevel)
                .WriteTo.File(Path.Combine(currentPath,
-                   @"log\mqtt_server_.txt"), rollingInterval: RollingInterval.Minute)
+                   @"log/mqtt_server_.txt"), rollingInterval: RollingInterval.Minute)
+               .WriteTo.Console()
                .CreateLogger();
 
             _config = config;
+            mqttServerLogger.Information("Logger Established");
             MqttServerService = new MqttServerService(_config, mqttServerLogger);
         }
 

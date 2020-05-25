@@ -3,6 +3,7 @@ import Router, { Route } from "vue-router";
 import Home from "@/home/Home.vue";
 import LoginMain from "@/login/LoginMain.vue";
 import DeviceMain from "@/device/DeviceMain.vue";
+import DeviceDetailsMain from "@/deviceDetails/DeviceDetailsMain.vue";
 
 Vue.use(Router);
 
@@ -15,13 +16,21 @@ export default new Router({
 	routes: [
 		{
 			path: "/",
-			component: Home,
-			name: "Home"
+			component: DeviceMain,
+			name: "DeviceList"
 		},
 		{
 			path: "/devices",
 			component: DeviceMain,
 			name: "DeviceList"
+		},
+		{
+			path: "/device/:serialNumber",
+			component: DeviceDetailsMain,
+			name: "DeviceDetailsMain",
+			props: (route: Route) => ({
+				serialNumber: route.params.serialNumber as string
+			})
 		},
 		{
 			path: "/login",

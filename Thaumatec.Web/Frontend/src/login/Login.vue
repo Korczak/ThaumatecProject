@@ -25,7 +25,7 @@
 					:label="translation.LoginPassword"
 					v-model="password"
 					:rules="passwordRequired"
-                    type="password"
+					type="password"
 				/>
 
 				<v-card-actions>
@@ -66,11 +66,7 @@ export default class Login extends Mixins(Translation) {
 	passwordRequired = this.requiredRule("Password");
 	private requiredRule(fieldName: string): ((v: any) => string | boolean)[] {
 		const translatedName = this.getTranslatedValue(fieldName);
-		return [
-			(v: any) =>
-				!!v ||
-				this.translation.Required
-		];
+		return [(v: any) => !!v || this.translation.Required];
 	}
 	async login() {
 		const request = new UserLoginRequest({

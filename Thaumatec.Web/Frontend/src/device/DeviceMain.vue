@@ -1,5 +1,5 @@
 <template>
-	<v-container align-center justify-center class="py-11 mx-11">
+	<v-container align-center justify-center class="py-11">
 		<v-card>
 			<v-row>
 				<v-container class="px-9">
@@ -17,7 +17,9 @@
 						<v-col cols="1"></v-col>
 						<v-col cols="2" justify-self="end">
 							<v-layout class="actions" justify-end>
-								<add-device-dialog></add-device-dialog>
+								<add-device-dialog
+									@onAdded="loadDevices()"
+								></add-device-dialog>
 							</v-layout>
 						</v-col>
 					</v-row>
@@ -25,25 +27,26 @@
 				<v-container class="py-0 px-9" fluid>
 					<div>
 						<v-data-table
-							class="dataTable"
+							class="dataTable mb-11"
 							:headers="headers"
 							:items="devices"
-							v-bind:items-per-page.sync="itemsPerPage"
-							v-bind:page.sync="page"
+							disable-pagination
 							hide-default-footer
-							show-select
 						>
 							<template v-slot:item.deviceName="{ item }">
-								{{ item.Name }}
+								{{ item.name }}
 							</template>
 							<template v-slot:item.location="{ item }">
-								{{ item.Location }}
+								{{ item.location }}
+							</template>
+							<template v-slot:item.serialNumber="{ item }">
+								{{ item.serialNumber }}
 							</template>
 							<template v-slot:item.lastUpdate="{ item }">
 								<span>
 									{{
 										moment(
-											item.LastUpdate,
+											item.lastUpdateDateTime,
 											"YYYY-MM-DDThh:mm:ss"
 										).format("YYYY-MM-DD HH:mm:ss")
 									}}
@@ -53,27 +56,25 @@
 								<span>
 									{{
 										moment(
-											item.LastPrint,
+											item.lastPrintDateTime,
 											"YYYY-MM-DDThh:mm:ss"
 										).format("YYYY-MM-DD HH:mm:ss")
 									}}
 								</span>
 							</template>
 							<template v-slot:item.actions="{ item }">
-								<v-btn width="35" height="35" icon>
+								<v-btn
+									width="35"
+									height="35"
+									icon
+									@click="action(item.serialNumber)"
+								>
 									<v-icon x-large color="#90caf9"
 										>forward</v-icon
 									>
 								</v-btn>
 							</template>
 						</v-data-table>
-						<v-pagination
-							v-model="page"
-							:length="pages"
-							circle
-							prev-icon="mdi-menu-left"
-							next-icon="mdi-menu-right"
-						></v-pagination>
 					</div>
 				</v-container>
 			</v-row>
@@ -110,6 +111,10 @@ export default class DeviceMain extends Mixins(Translation) {
 	devices: GetUserDeviceItem[] = [];
 
 	async mounted() {
+		await this.loadDevices();
+	}
+
+	async loadDevices() {
 		const response = await this.deviceClient.getDevicesForUser();
 		this.devices = response.devices!;
 	}
@@ -118,6 +123,7 @@ export default class DeviceMain extends Mixins(Translation) {
 		return [
 			{ text: this.translation.DeviceName, value: "deviceName" },
 			{ text: this.translation.Location, value: "location" },
+			{ text: this.translation.DeviceSerialNumber, value: "serialNumber" },
 			{ text: this.translation.LastUpdate, value: "lastUpdate" },
 			{ text: this.translation.LastPrint, value: "lastPrint" },
 			{ text: this.translation.Status, value: "status" },
@@ -127,6 +133,13 @@ export default class DeviceMain extends Mixins(Translation) {
 				value: "actions"
 			}
 		];
+	}
+
+	action(deviceId: string) {
+		this.$router.push({
+			name: "DeviceDetailsMain",
+			params: { serialNumber: deviceId }
+		});
 	}
 }
 </script>

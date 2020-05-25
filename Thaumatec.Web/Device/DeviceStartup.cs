@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Thaumatec.Core.Device.AddNewDevice;
 using Thaumatec.Core.Device.AppendDeviceToUser;
+using Thaumatec.Core.Device.GetDetails;
 using Thaumatec.Core.Device.GetUserDevices;
 using Thaumatec.Web.Configuration;
 
@@ -18,6 +19,8 @@ namespace Thaumatec.Web.Device
 
             services.AddSingleton<AppendDeviceToUserService>();
             services.AddSingleton<AppendDeviceToUserAccess>();
+
+            services.AddSingleton<DeviceGetDetailsAccess>();
         }
     }
 }

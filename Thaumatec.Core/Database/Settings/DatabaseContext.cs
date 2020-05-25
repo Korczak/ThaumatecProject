@@ -15,6 +15,7 @@ namespace Thaumatec.Core.Database.Settings
         public MongoClient Client { get => _client; }
         public IMongoDatabase Database { get => _db; }
         public IMongoCollection<Models.Device.Devices> Devices => _db.GetCollection<Models.Device.Devices>("Device");
+        public IMongoCollection<Models.Device.Prints> Prints => _db.GetCollection<Models.Device.Prints>("Print");
         public IMongoCollection<Models.User.Users> Users => _db.GetCollection<Models.User.Users>("User");
         public IMongoCollection<Models.UserDevice.UserDevices> UserDevices => _db.GetCollection<Models.UserDevice.UserDevices>("UserDevices");
 

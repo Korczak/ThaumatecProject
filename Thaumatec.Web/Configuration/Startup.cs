@@ -19,6 +19,7 @@ using MQTTnet.Client.Options;
 using Thaumatec.Web.DeviceConnector;
 using Thaumatec.Core.DeviceConnector.ActualStatus;
 using Thaumatec.Core.DeviceConnector.Initialize;
+using Thaumatec.Core.MqttPublisher;
 
 namespace Thaumatec.Web
 {
@@ -56,12 +57,17 @@ namespace Thaumatec.Web
             services.AddSwaggerDocument();
 
 
-            var mqttClientOptions = new MqttClientOptionsBuilder()
-               .WithClientId(config.ClientSettings.Id)
-               .WithTcpServer(config.BrokerSettings.Host, config.BrokerSettings.Port)
-               .WithCredentials(config.ClientSettings.UserName, config.ClientSettings.Password)
-               .Build();
-            services.AddSingleton<IMqttClientOptions>(mqttClientOptions);
+            var mqttClientSettings = new MqttClientSettings()
+            {
+                Password = config.ClientSettings.Password,
+                UserName = config.ClientSettings.UserName,
+                Host = config.BrokerSettings.Host,
+                Port = config.BrokerSettings.Port
+            };
+
+            services.AddSingleton(mqttClientSettings);
+
+            services.AddSingleton<MqttPublisherService>();
 
             AutoConfigureServices(services);
         }
@@ -69,6 +75,7 @@ namespace Thaumatec.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var (config, configValidation) = GetConfig(Configuration);
+            var mqttPublisher = (MqttPublisherService)app.ApplicationServices.GetService(typeof(MqttPublisherService));
 
             var webStartup = new WebStartup(app, env);
             var loggingStartup = new LoggingStartup(config, new LoggingPaths());
@@ -87,7 +94,7 @@ namespace Thaumatec.Web
                 mqttServerValidation,
                 databaseValidation
                 );
-
+            mqttPublisher.SetConnection();
             PrintStatus();
 
             AutoConfigureControllers(app);

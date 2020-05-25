@@ -220,6 +220,43 @@ export class DeviceClient {
         return Promise.resolve<GetUserDevicesResponse>(<any>null);
     }
 
+    getDevice(serialNumber: string): Promise<DeviceGetDetailsResponse> {
+        let url_ = this.baseUrl + "/api/device/{serialNumber}";
+        if (serialNumber === undefined || serialNumber === null)
+            throw new Error("The parameter 'serialNumber' must be defined.");
+        url_ = url_.replace("{serialNumber}", encodeURIComponent("" + serialNumber));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetDevice(_response);
+        });
+    }
+
+    protected processGetDevice(response: Response): Promise<DeviceGetDetailsResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DeviceGetDetailsResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DeviceGetDetailsResponse>(<any>null);
+    }
+
     addNewDevice(request: AddNewDeviceRequest | null): Promise<FileResponse | null> {
         let url_ = this.baseUrl + "/api/devices";
         url_ = url_.replace(/[?&]$/, "");
@@ -292,6 +329,164 @@ export class DeviceClient {
             });
         }
         return Promise.resolve<AppendDeviceToUserResponse>(<any>null);
+    }
+}
+
+export class PrintClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getActivePrintForDevice(serialNumber: string): Promise<PrintDetailsResponse> {
+        let url_ = this.baseUrl + "/api/print/{serialNumber}";
+        if (serialNumber === undefined || serialNumber === null)
+            throw new Error("The parameter 'serialNumber' must be defined.");
+        url_ = url_.replace("{serialNumber}", encodeURIComponent("" + serialNumber));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetActivePrintForDevice(_response);
+        });
+    }
+
+    protected processGetActivePrintForDevice(response: Response): Promise<PrintDetailsResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PrintDetailsResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PrintDetailsResponse>(<any>null);
+    }
+
+    startPrint(request: PrintStartRequest | null): Promise<PrintStartResponse> {
+        let url_ = this.baseUrl + "/api/print/start";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processStartPrint(_response);
+        });
+    }
+
+    protected processStartPrint(response: Response): Promise<PrintStartResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PrintStartResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PrintStartResponse>(<any>null);
+    }
+
+    stopPrint(request: PrintStopRequest | null): Promise<PrintStartResponse> {
+        let url_ = this.baseUrl + "/api/print/stop";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processStopPrint(_response);
+        });
+    }
+
+    protected processStopPrint(response: Response): Promise<PrintStartResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PrintStartResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PrintStartResponse>(<any>null);
+    }
+
+    getPrints(): Promise<PrintListResponse> {
+        let url_ = this.baseUrl + "/api/print/list";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPrints(_response);
+        });
+    }
+
+    protected processGetPrints(response: Response): Promise<PrintListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PrintListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PrintListResponse>(<any>null);
     }
 }
 
@@ -541,6 +736,7 @@ export interface IGetUserDevicesResponse {
 }
 
 export class GetUserDeviceItem implements IGetUserDeviceItem {
+    serialNumber?: string | null;
     name?: string | null;
     lastUpdateDateTime!: string;
     lastPrintDateTime!: string;
@@ -558,6 +754,7 @@ export class GetUserDeviceItem implements IGetUserDeviceItem {
 
     init(_data?: any) {
         if (_data) {
+            this.serialNumber = _data["serialNumber"] !== undefined ? _data["serialNumber"] : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.lastUpdateDateTime = _data["lastUpdateDateTime"] !== undefined ? _data["lastUpdateDateTime"] : <any>null;
             this.lastPrintDateTime = _data["lastPrintDateTime"] !== undefined ? _data["lastPrintDateTime"] : <any>null;
@@ -575,6 +772,7 @@ export class GetUserDeviceItem implements IGetUserDeviceItem {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["serialNumber"] = this.serialNumber !== undefined ? this.serialNumber : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["lastUpdateDateTime"] = this.lastUpdateDateTime !== undefined ? this.lastUpdateDateTime : <any>null;
         data["lastPrintDateTime"] = this.lastPrintDateTime !== undefined ? this.lastPrintDateTime : <any>null;
@@ -585,6 +783,7 @@ export class GetUserDeviceItem implements IGetUserDeviceItem {
 }
 
 export interface IGetUserDeviceItem {
+    serialNumber?: string | null;
     name?: string | null;
     lastUpdateDateTime: string;
     lastPrintDateTime: string;
@@ -597,6 +796,58 @@ export enum DeviceStatus {
     Active = "Active",
     Printing = "Printing",
     Aborting = "Aborting",
+}
+
+export class DeviceGetDetailsResponse implements IDeviceGetDetailsResponse {
+    name?: string | null;
+    lastPrintDateTime!: string;
+    location?: string | null;
+    numberOfPrintsDone!: number;
+    status!: DeviceStatus;
+
+    constructor(data?: IDeviceGetDetailsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.lastPrintDateTime = _data["lastPrintDateTime"] !== undefined ? _data["lastPrintDateTime"] : <any>null;
+            this.location = _data["location"] !== undefined ? _data["location"] : <any>null;
+            this.numberOfPrintsDone = _data["numberOfPrintsDone"] !== undefined ? _data["numberOfPrintsDone"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): DeviceGetDetailsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeviceGetDetailsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["lastPrintDateTime"] = this.lastPrintDateTime !== undefined ? this.lastPrintDateTime : <any>null;
+        data["location"] = this.location !== undefined ? this.location : <any>null;
+        data["numberOfPrintsDone"] = this.numberOfPrintsDone !== undefined ? this.numberOfPrintsDone : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        return data; 
+    }
+}
+
+export interface IDeviceGetDetailsResponse {
+    name?: string | null;
+    lastPrintDateTime: string;
+    location?: string | null;
+    numberOfPrintsDone: number;
+    status: DeviceStatus;
 }
 
 export class AddNewDeviceRequest implements IAddNewDeviceRequest {
@@ -683,9 +934,12 @@ export enum AppendDeviceToUserResult {
     Success = "Success",
     DeviceNotExist = "DeviceNotExist",
     UserNotExist = "UserNotExist",
+    UserAlreadyAddedThisDevice = "UserAlreadyAddedThisDevice",
 }
 
 export class AppendDeviceToUserRequest implements IAppendDeviceToUserRequest {
+    name?: string | null;
+    location?: string | null;
     serialNumber?: string | null;
 
     constructor(data?: IAppendDeviceToUserRequest) {
@@ -699,6 +953,8 @@ export class AppendDeviceToUserRequest implements IAppendDeviceToUserRequest {
 
     init(_data?: any) {
         if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.location = _data["location"] !== undefined ? _data["location"] : <any>null;
             this.serialNumber = _data["serialNumber"] !== undefined ? _data["serialNumber"] : <any>null;
         }
     }
@@ -712,13 +968,395 @@ export class AppendDeviceToUserRequest implements IAppendDeviceToUserRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["location"] = this.location !== undefined ? this.location : <any>null;
         data["serialNumber"] = this.serialNumber !== undefined ? this.serialNumber : <any>null;
         return data; 
     }
 }
 
 export interface IAppendDeviceToUserRequest {
+    name?: string | null;
+    location?: string | null;
     serialNumber?: string | null;
+}
+
+export class PrintDetailsResponse implements IPrintDetailsResponse {
+    isSuccess!: boolean;
+    printInformation?: PrintInformation | null;
+
+    constructor(data?: IPrintDetailsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            this.printInformation = data.printInformation && !(<any>data.printInformation).toJSON ? new PrintInformation(data.printInformation) : <PrintInformation>this.printInformation; 
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"] !== undefined ? _data["isSuccess"] : <any>null;
+            this.printInformation = _data["printInformation"] ? PrintInformation.fromJS(_data["printInformation"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): PrintDetailsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintDetailsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess !== undefined ? this.isSuccess : <any>null;
+        data["printInformation"] = this.printInformation ? this.printInformation.toJSON() : <any>null;
+        return data; 
+    }
+}
+
+export interface IPrintDetailsResponse {
+    isSuccess: boolean;
+    printInformation?: IPrintInformation | null;
+}
+
+export class PrintInformation implements IPrintInformation {
+    name?: string | null;
+    startedTime!: string;
+    temperatures?: TemperatureItem[] | null;
+
+    constructor(data?: IPrintInformation) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            if (data.temperatures) {
+                this.temperatures = [];
+                for (let i = 0; i < data.temperatures.length; i++) {
+                    let item = data.temperatures[i];
+                    this.temperatures[i] = item && !(<any>item).toJSON ? new TemperatureItem(item) : <TemperatureItem>item;
+                }
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.startedTime = _data["startedTime"] !== undefined ? _data["startedTime"] : <any>null;
+            if (Array.isArray(_data["temperatures"])) {
+                this.temperatures = [] as any;
+                for (let item of _data["temperatures"])
+                    this.temperatures!.push(TemperatureItem.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PrintInformation {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintInformation();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["startedTime"] = this.startedTime !== undefined ? this.startedTime : <any>null;
+        if (Array.isArray(this.temperatures)) {
+            data["temperatures"] = [];
+            for (let item of this.temperatures)
+                data["temperatures"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPrintInformation {
+    name?: string | null;
+    startedTime: string;
+    temperatures?: ITemperatureItem[] | null;
+}
+
+export class TemperatureItem implements ITemperatureItem {
+    dateTime!: string;
+    temperatureBed!: number;
+    temperatureTool0!: number;
+    temperatureTool1!: number;
+
+    constructor(data?: ITemperatureItem) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.dateTime = _data["dateTime"] !== undefined ? _data["dateTime"] : <any>null;
+            this.temperatureBed = _data["temperatureBed"] !== undefined ? _data["temperatureBed"] : <any>null;
+            this.temperatureTool0 = _data["temperatureTool0"] !== undefined ? _data["temperatureTool0"] : <any>null;
+            this.temperatureTool1 = _data["temperatureTool1"] !== undefined ? _data["temperatureTool1"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): TemperatureItem {
+        data = typeof data === 'object' ? data : {};
+        let result = new TemperatureItem();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dateTime"] = this.dateTime !== undefined ? this.dateTime : <any>null;
+        data["temperatureBed"] = this.temperatureBed !== undefined ? this.temperatureBed : <any>null;
+        data["temperatureTool0"] = this.temperatureTool0 !== undefined ? this.temperatureTool0 : <any>null;
+        data["temperatureTool1"] = this.temperatureTool1 !== undefined ? this.temperatureTool1 : <any>null;
+        return data; 
+    }
+}
+
+export interface ITemperatureItem {
+    dateTime: string;
+    temperatureBed: number;
+    temperatureTool0: number;
+    temperatureTool1: number;
+}
+
+export class PrintStartResponse implements IPrintStartResponse {
+    isSuccess!: boolean;
+
+    constructor(data?: IPrintStartResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"] !== undefined ? _data["isSuccess"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): PrintStartResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintStartResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess !== undefined ? this.isSuccess : <any>null;
+        return data; 
+    }
+}
+
+export interface IPrintStartResponse {
+    isSuccess: boolean;
+}
+
+export class PrintStartRequest implements IPrintStartRequest {
+    serialNumber?: string | null;
+    printName?: string | null;
+    gcode?: string | null;
+
+    constructor(data?: IPrintStartRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.serialNumber = _data["serialNumber"] !== undefined ? _data["serialNumber"] : <any>null;
+            this.printName = _data["printName"] !== undefined ? _data["printName"] : <any>null;
+            this.gcode = _data["gcode"] !== undefined ? _data["gcode"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): PrintStartRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintStartRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["serialNumber"] = this.serialNumber !== undefined ? this.serialNumber : <any>null;
+        data["printName"] = this.printName !== undefined ? this.printName : <any>null;
+        data["gcode"] = this.gcode !== undefined ? this.gcode : <any>null;
+        return data; 
+    }
+}
+
+export interface IPrintStartRequest {
+    serialNumber?: string | null;
+    printName?: string | null;
+    gcode?: string | null;
+}
+
+export class PrintStopRequest implements IPrintStopRequest {
+    serialNumber?: string | null;
+    printName?: string | null;
+
+    constructor(data?: IPrintStopRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.serialNumber = _data["serialNumber"] !== undefined ? _data["serialNumber"] : <any>null;
+            this.printName = _data["printName"] !== undefined ? _data["printName"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): PrintStopRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintStopRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["serialNumber"] = this.serialNumber !== undefined ? this.serialNumber : <any>null;
+        data["printName"] = this.printName !== undefined ? this.printName : <any>null;
+        return data; 
+    }
+}
+
+export interface IPrintStopRequest {
+    serialNumber?: string | null;
+    printName?: string | null;
+}
+
+export class PrintListResponse implements IPrintListResponse {
+    isSuccess!: boolean;
+    printInformation?: PrintInformation2[] | null;
+
+    constructor(data?: IPrintListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+            if (data.printInformation) {
+                this.printInformation = [];
+                for (let i = 0; i < data.printInformation.length; i++) {
+                    let item = data.printInformation[i];
+                    this.printInformation[i] = item && !(<any>item).toJSON ? new PrintInformation2(item) : <PrintInformation2>item;
+                }
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isSuccess = _data["isSuccess"] !== undefined ? _data["isSuccess"] : <any>null;
+            if (Array.isArray(_data["printInformation"])) {
+                this.printInformation = [] as any;
+                for (let item of _data["printInformation"])
+                    this.printInformation!.push(PrintInformation2.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PrintListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isSuccess"] = this.isSuccess !== undefined ? this.isSuccess : <any>null;
+        if (Array.isArray(this.printInformation)) {
+            data["printInformation"] = [];
+            for (let item of this.printInformation)
+                data["printInformation"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPrintListResponse {
+    isSuccess: boolean;
+    printInformation?: IPrintInformation2[] | null;
+}
+
+export class PrintInformation2 implements IPrintInformation2 {
+    name?: string | null;
+    startedTime!: string;
+    stoppedTime!: string;
+    status!: PrintStatus;
+
+    constructor(data?: IPrintInformation2) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.startedTime = _data["startedTime"] !== undefined ? _data["startedTime"] : <any>null;
+            this.stoppedTime = _data["stoppedTime"] !== undefined ? _data["stoppedTime"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): PrintInformation2 {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrintInformation2();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["startedTime"] = this.startedTime !== undefined ? this.startedTime : <any>null;
+        data["stoppedTime"] = this.stoppedTime !== undefined ? this.stoppedTime : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        return data; 
+    }
+}
+
+export interface IPrintInformation2 {
+    name?: string | null;
+    startedTime: string;
+    stoppedTime: string;
+    status: PrintStatus;
+}
+
+export enum PrintStatus {
+    Ready = "Ready",
+    Printing = "Printing",
+    Done = "Done",
+    Aborted = "Aborted",
 }
 
 export interface FileResponse {

@@ -33,6 +33,8 @@
 											v =>
 												!!v || this.translation.Required
 										]"
+										:error-messages="nameErrors"
+										@change="nameErrors = null"
 									></v-text-field>
 								</v-row>
 								<v-row>
@@ -82,14 +84,16 @@ import Translation from "@/language/translation";
 import AddNewDeviceInput from "./AddNewDeviceInput";
 import {
 	DeviceClient,
-	AddNewDeviceRequest
+	AppendDeviceToUserResponse,
+	AppendDeviceToUserResult,
+	AppendDeviceToUserRequest
 } from "../api-clients/ClientsGenerated";
 
 @Component({ components: {} })
 export default class AddDeviceDialog extends Mixins(Translation) {
 	@Inject() readonly deviceClient!: DeviceClient;
 
-	deviceInput: AddNewDeviceRequest = new AddNewDeviceRequest();
+	deviceInput: AppendDeviceToUserRequest = new AppendDeviceToUserRequest();
 
 	dialog = false;
 	valid = false;
@@ -98,16 +102,30 @@ export default class AddDeviceDialog extends Mixins(Translation) {
 		this.dialog = false;
 	}
 
-	saveData() {
+	nameErrors: string | null = null;
+
+	async saveData() {
 		this.valid = (this.$refs.form as Vue & {
 			validate: () => boolean;
 		}).validate();
 
 		if (!this.valid) return;
 
-		console.log(this.deviceInput);
+		const response = await this.deviceClient.appendDevice(this.deviceInput);
 
-		this.deviceClient.addNewDevice(this.deviceInput);
+		if (response.result == AppendDeviceToUserResult.Success) {
+			this.$emit("onAdded");
+			this.closeDialog();
+		} else {
+			switch (response.result) {
+				case AppendDeviceToUserResult.DeviceNotExist:
+					this.nameErrors = this.translation.DeviceNotExists;
+					break;
+				case AppendDeviceToUserResult.UserAlreadyAddedThisDevice:
+					this.nameErrors = this.translation.DeviceAlreadyAdded;
+					break;
+			}
+		}
 	}
 }
 </script>

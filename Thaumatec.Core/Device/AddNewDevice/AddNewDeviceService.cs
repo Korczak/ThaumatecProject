@@ -15,7 +15,7 @@ namespace Thaumatec.Core.Device.AddNewDevice
             _access = access;
         }
 
-        public Task AddNewDeice(AddNewDeviceRequest request)
+        public Task AddNewDevice(AddNewDeviceRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 

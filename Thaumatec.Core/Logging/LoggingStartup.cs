@@ -2,6 +2,8 @@
 using Serilog;
 using System;
 using System.IO;
+using NodaTime;
+using System.Globalization;
 
 namespace Thaumatec.Core.Logging
 {
@@ -18,7 +20,7 @@ namespace Thaumatec.Core.Logging
 
         public IStartupValidation Configure()
         {
-            string logName = DateTime.Now.ToShortDateString();
+            string logName = LocalDateTime.FromDateTime(DateTime.Now).ToString("yyyy_MM_dd_hh", new CultureInfo("en-US"));
             var logPath = Path.Combine(_paths.LoggerPath, $"log_{logName}.log");
             File.Create(logPath);
 

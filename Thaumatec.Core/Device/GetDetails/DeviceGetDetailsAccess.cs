@@ -12,11 +12,13 @@ namespace Thaumatec.Core.Device.GetDetails
 {
     public class DeviceGetDetailsAccess
     {
-        public async Task<DeviceGetDetailsResponse> GetDetails(ObjectId id)
+        public async Task<DeviceGetDetailsResponse> GetDetails(string serialNumber)
         {
             using (var handler = new DatabaseHandler())
             {
-                return await handler.db.Devices.AsQueryable().Where(x => x.Id == id).Select(x => new DeviceGetDetailsResponse(x.Name, x.LastPrintDateTime, x.Location, x.PrintsIds.Count(), x.Status)).FirstOrDefaultAsync();
+                return await handler.db.Devices.AsQueryable().Where(x => x.SerialNumber == serialNumber)
+                    .Select(x => new DeviceGetDetailsResponse(x.Name, x.LastPrintDateTime, x.Location, x.PrintsIds.Count(), x.Status))
+                    .FirstOrDefaultAsync();
             }
         }
     }
