@@ -34,13 +34,8 @@ namespace Thaumatec.Core.Database.Settings
 
         public static void SetConnection(string connectionString, string databaseName)
         {
-            if (isConnectionEstablished)
-                return;
-
             _client = new MongoClient(connectionString);
             _db = Client.GetDatabase(databaseName);
-            //MongoMigrationClient.Initialize(_client);
-            isConnectionEstablished = true;
         }
     }
 }
