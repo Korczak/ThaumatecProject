@@ -1,6 +1,6 @@
 # Thaumatec Project
 
-Project that gives opportunity to steer 3D printer remotely. It was developed as part of the classes at the Wrocław University of Technology with the help of the Thaumatec company.
+Project that gives opportunity to steer 3D printer remotely. It was developed as part of the classes at the Wrocław University of Technology in cooperation with the Thaumatec company.
 
 ## Requirements
 * npm
